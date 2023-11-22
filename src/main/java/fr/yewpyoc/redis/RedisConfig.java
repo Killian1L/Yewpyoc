@@ -1,0 +1,21 @@
+package fr.yewpyoc.redis;
+
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.StatefulRedisConnection;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class RedisConfig {
+
+    // TODO : Redis document try for free redis db
+    @Bean
+    public RedisClient redisClient() {
+        return RedisClient.create("redis://localhost:6379");
+    }
+
+    @Bean
+    public StatefulRedisConnection<String, String> redisConnection(RedisClient redisClient) {
+        return redisClient.connect();
+    }
+}
