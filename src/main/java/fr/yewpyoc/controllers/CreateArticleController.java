@@ -33,7 +33,7 @@ public class CreateArticleController {
 
     @PostMapping("/create-article")
     public String createArticle(@RequestParam String articleName, Model model) {
-        System.out.println("Nom de l'article : " + articleName);
+        System.out.println("Nom de l'article ajouté : " + articleName);
 
         MongoDatabase yewpyocDatabase = mongoClient.getDatabase("yewpyoc");
         MongoCollection<Document> articlesCollection = yewpyocDatabase.getCollection("articles");

@@ -5,9 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import fr.yewpyoc.mongodb.MongoUtils;
 import fr.yewpyoc.redis.RedisUtils;
-import io.lettuce.core.api.StatefulRedisConnection;
 import jakarta.annotation.PreDestroy;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -17,8 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import redis.clients.jedis.Jedis;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,22 +24,22 @@ import java.util.List;
 public class SearchArticleController {
 
     private final MongoClient mongoClient;
-    private final StatefulRedisConnection<String, String> redisConnection;
-
+    private final Jedis jedis;
     @Autowired
-    public SearchArticleController(MongoClient mongoClient, StatefulRedisConnection<String, String> redisConnection) {
+    public SearchArticleController(MongoClient mongoClient, Jedis jedis) {
         this.mongoClient = mongoClient;
-        this.redisConnection = redisConnection;
+        this.jedis = jedis;
     }
 
     @GetMapping("/search-article")
     public String createArticle() {
+        RedisUtils.afficherArticlesSurRedis(jedis);
         return "search-article";
     }
 
     @PostMapping("/search-article")
     public String searchArticle(@RequestParam String articleName, Model model) {
-        System.out.println("Nom de l'article : " + articleName);
+        System.out.println("Nom de l'article recherché : " + articleName);
 
         MongoDatabase yewpyocDatabase = mongoClient.getDatabase("yewpyoc");
         MongoCollection<Document> articlesCollection = yewpyocDatabase.getCollection("articles");
@@ -58,11 +56,10 @@ public class SearchArticleController {
             }
         }
 
+        // Sauvegarder les articles dans Redis
+        RedisUtils.saveArticlesToRedis(jedis, articles);
+
         model.addAttribute("searchResult", articles);
-
-        RedisUtils.setValue(redisConnection, "articleName", articleName);
-
-        System.out.println("Valeur de l'article enregistrée dans Redis : " + RedisUtils.getValue(redisConnection, "articleName"));
 
         return "redirect:/search-article";
     }
@@ -71,6 +68,9 @@ public class SearchArticleController {
     public void closeMongoClient() {
         if (mongoClient != null) {
             mongoClient.close();
+        }
+        if(jedis != null) {
+            jedis.close();
         }
     }
 }

@@ -20,11 +20,11 @@ public class MongoDatabaseInitializer {
 
     @PostConstruct
     public void init() {
-        MongoDatabase yewpyocDatabase = mongoClient.getDatabase("yewpyoc");
-
-        yewpyocDatabase.getCollection("articles").drop();
-
-        createArticle(yewpyocDatabase);
+//        MongoDatabase yewpyocDatabase = mongoClient.getDatabase("yewpyoc");
+//
+//        yewpyocDatabase.getCollection("articles").drop();
+//
+//        createArticle(yewpyocDatabase);
     }
 
     private void createArticle(MongoDatabase yewpyocDatabase) {
