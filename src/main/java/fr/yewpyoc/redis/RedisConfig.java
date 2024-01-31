@@ -14,11 +14,8 @@ public class RedisConfig {
 
     @Bean
     public Jedis jedis() {
-//        String redisUrl = "redis://default:" + REDIS_PASSWORD + "@" + REDIS_HOST + ":" + REDIS_PORT;
-//        Jedis jedis = new Jedis("redis://default:7OBTw6QnxRXK0zpZQLuGZfY4YnDdvRRQ@redis-15978.c304.europe-west1-2.gce.cloud.redislabs.com:15978");
         Jedis jedis = new Jedis(REDIS_HOST, REDIS_PORT);
         jedis.auth(REDIS_PASSWORD);
-
 
         return jedis;
     }
