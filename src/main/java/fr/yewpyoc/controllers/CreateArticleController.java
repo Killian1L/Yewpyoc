@@ -25,8 +25,6 @@ public class CreateArticleController {
 
     @GetMapping("/create-article")
     public String createArticle() {
-        MongoDatabase yewpyocDatabase = mongoClient.getDatabase("yewpyoc");
-        MongoUtils.printAllDocuments(yewpyocDatabase.getCollection("articles"));
         return "create-article";
     }
 

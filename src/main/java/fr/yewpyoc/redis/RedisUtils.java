@@ -3,7 +3,6 @@ package fr.yewpyoc.redis;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.yewpyoc.model.Article;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.ScanParams;
 import redis.clients.jedis.resps.ScanResult;
@@ -37,35 +36,6 @@ public class RedisUtils {
         }
     }
 
-    public static void afficherArticlesSurRedis(Jedis jedis) {
-        System.out.println("--------------------");
-        System.out.println("Affichage de toutes les clés Redis : ");
-        // Utiliser SCAN pour récupérer toutes les clés commençant par "article:"
-        ScanParams scanParams = new ScanParams().match("article:*");
-        String cursor = "0";
-
-        do {
-            ScanResult<String> scanResult = jedis.scan(cursor, scanParams);
-            List<String> keys = scanResult.getResult();
-
-            for (String key : keys) {
-                long ttl = jedis.ttl(key); // Temps restant avant expiration en secondes
-
-                // Récupérer la valeur associée à la clé (l'article au format JSON)
-                String articleJson = jedis.get(key);
-
-                // Afficher les détails de l'article
-                System.out.println("Clé : " + key);
-                System.out.println("Article JSON : " + articleJson);
-                System.out.println("Temps restant avant expiration : " + ttl + " secondes");
-                System.out.println();
-            }
-
-            cursor = scanResult.getCursor();
-        } while (!"0".equals(cursor));
-        System.out.println("--------------------");
-    }
-
     public static List<Article> searchArticlesByName(Jedis jedis, String name) {
         List<Article> result = new ArrayList<>();
 
@@ -93,7 +63,7 @@ public class RedisUtils {
                 cursor = scanResult.getCursor();
             } while (!"0".equals(cursor));
         } catch (IOException e) {
-            //
+            System.out.println("Une erreur est survenue lors de la conversion de l'article JSON en objet Article : " + e.getMessage());
         }
 
         return result;

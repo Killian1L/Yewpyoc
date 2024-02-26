@@ -6,25 +6,15 @@ import fr.yewpyoc.model.Article;
 import fr.yewpyoc.redis.RedisUtils;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MongoUtils {
 
-    public static void printAllDocuments(MongoCollection<Document> collection) {
-        System.out.println("--------------------");
-        System.out.println("Affichage de tous les documents de la collection " + collection.getNamespace());
-        FindIterable<Document> documents = collection.find();
-        for (Document document : documents)
-            System.out.println(document.toJson());
-        System.out.println("--------------------");
-    }
-
-    public static List<Article> searchArticlesByName(MongoClient mongoClient, Jedis jedis, List<Article> articlesAlreadyFound, String articleName) {
+    public static List<Article> searchArticlesByName(MongoClient mongoClient, Jedis jedis,
+                                                     List<Article> articlesAlreadyFound, String articleName) {
         List<Article> foundArticles = new ArrayList<>();
 
         MongoDatabase yewpyocDatabase = mongoClient.getDatabase("yewpyoc");

@@ -29,8 +29,6 @@ public class SearchArticleController {
 
     @GetMapping("/search-article")
     public String searchArticle(Model model, HttpSession session) {
-        // RedisUtils.afficherArticlesSurRedis(jedis);
-
         List<Article> searchResult = (List<Article>) session.getAttribute("searchResult");
         if(searchResult != null) {
             model.addAttribute("searchResult", searchResult);

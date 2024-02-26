@@ -14,5 +14,21 @@
     <br>
     <button type="submit">Chercher</button>
 </form>
+
+<div th:if="${searchResult != null}">
+    <h2>Résultats de la recherche :</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Nom des articles trouvés</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="article : ${searchResult}">
+            <td th:text="${article.getArticleName()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

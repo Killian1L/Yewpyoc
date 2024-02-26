@@ -7,10 +7,9 @@ import redis.clients.jedis.Jedis;
 @Configuration
 public class RedisConfig {
 
-    // TODO : Redis document try for free redis db
-    private final String REDIS_HOST = "redis-12323.c304.europe-west1-2.gce.cloud.redislabs.com";
-    private final int REDIS_PORT = 12323;
-    private final String REDIS_PASSWORD = "Rn97JtzHGZpdLoOUWhi0T2NNSe3o63sx";
+    private final String REDIS_HOST = "redis-13767.c327.europe-west1-2.gce.cloud.redislabs.com";
+    private final int REDIS_PORT = 13767;
+    private final String REDIS_PASSWORD = "zQJidSbSMKtTv4PgoQvdjAZpeCLY0BiA";
 
     @Bean
     public Jedis jedis() {
